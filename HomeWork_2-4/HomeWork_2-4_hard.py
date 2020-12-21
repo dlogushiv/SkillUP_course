@@ -6,26 +6,50 @@
 
 def look_base():
     print('The employees base:')
-    for emp in base:
-        print('id' + str(emp) + ':', base[emp])
+    for emp in BASE:
+        print('id' + str(emp) + ':', BASE[emp])
     main_menu()
 
 
 def add_employee():
     print('New employee adding.')
-    next_id = max(base.keys()) + 1
+    next_id = max(BASE.keys()) + 1
     name = input('Enter the name of new employee: ').title()
     phone = enter_phone()
     email = enter_email()
     position = input('Enter the job position of new employee: ').capitalize()
     skype = input('Enter the skype of new employee: ').lower()
-    base[next_id] = {'name': name, 'phone': phone, 'email': email, 'job position': position, 'skype': skype}
+    BASE[next_id] = {'name': name, 'phone': phone, 'email': email, 'job position': position, 'skype': skype}
     print('New employee added!\n')
     main_menu()
 
 
 def del_employee():
-    print('Delete')
+    print('Employee deleting. Please, select deleting method:')
+    print('1. via employee\'s ID.')
+    print('2. via employee\'s name.')
+    print('3. via employee\'s phone.')
+    print('4. via employee\'s email.')
+    print('5. via employee\'s skype.')
+    choice = correct_choice(5)
+    if choice == 1:
+        print('Deleting employee via ID.')
+        emp_id = correct_choice(max(BASE.keys()), 'ID')
+        while BASE.get(emp_id) == None:
+            print('ID not found! ', end='')
+            emp_id = correct_choice(max(BASE.keys()), 'ID')
+        del BASE[emp_id]
+        print('The employee with ID %s were delete.' % emp_id)
+    # todo
+    elif choice == 2:
+        print('Deleting employee via name.')
+    elif choice == 3:
+        print('3. via employee\'s phone.')
+    elif choice == 4:
+        print('4. via employee\'s email.')
+    else:  # choice == 5
+        print('5. via employee\'s skype.')
+    main_menu()
 
 
 def search_employee():
@@ -34,6 +58,20 @@ def search_employee():
 
 def change_employee():
     print('Change')
+
+
+def correct_choice(n, s1=''):
+    choice = 0
+    while choice not in range(1, n + 1):
+        try:
+            if s1 and 'of' not in s1:
+                s1 = ' of ' + s1
+            choice = int(input('Make your choice%s: ' % s1))
+            if choice not in range(1, n + 1):
+                try_again('selection', 'Input number from 1 to %s and press enter' % n)
+        except ValueError:
+            try_again('enter', 'Input number from 1 to %s and press enter' % n)
+    return choice
 
 
 def try_again(s1, s2):
@@ -73,14 +111,7 @@ def main_menu():
     print('4. Search the employee.')
     print('5. Change the employee\'s info.')
     print('6. Exit.')
-    choice = 0
-    while choice not in range(1, 7):
-        try:
-            choice = int(input('Make your choice: '))
-            if choice not in range(1, 7):
-                try_again('selection', 'Press button 1 - 5 and enter')
-        except ValueError:
-            try_again('enter', 'Press button 1 - 5 and enter')
+    choice = correct_choice(6)
     if choice == 1:
         look_base()
     elif choice == 2:
@@ -95,9 +126,11 @@ def main_menu():
         print('Goodbye!')
 
 
-base = {}
-base[1] = {'name': 'Joe Martin', 'phone': '+7654896547', 'email': 'joe.martin@gmail.com', 'job position': 'Chief', 'skype': 'jmartin'}
-base[2] = {'name': 'Mia Elison', 'phone': '+8936485472', 'email': 'mia.elison@gmail.com', 'job position': 'HR', 'skype': 'miael'}
-base[3] = {'name': 'Frederic Bouchon', 'phone': '+6321785214', 'email': 'fred.bouchon@true.fr', 'job position': 'Regional director',
-           'skype': 'fredbouchon'}
-main_menu()
+BASE = {1: {'name': 'Joe Martin', 'phone': '+7654896547', 'email': 'joe.martin@gmail.com', 'job position': 'Chief', 'skype': 'jmartin'},
+        2: {'name': 'Mia Ellison', 'phone': '+8936485472', 'email': 'mia.elison@gmail.com', 'job position': 'HR', 'skype': 'miael'},
+        4: {'name': 'Frederic Bouchon', 'phone': '+6321785214', 'email': 'fred.bouchon@true.fr', 'job position': 'Regional director',
+            'skype': 'fredbouchon'}}
+# print(max(BASE.keys()))
+# print(BASE.get(3))
+# main_menu()
+del_employee()
