@@ -2,7 +2,6 @@
 # Нужно хранить информацию о человеке: ФИО, телефон, рабочий email, название должности, номер кабинета, skype.
 # Требуется реализовать возможность добавления, удаления, поиска, замены данных.
 # Используйте словарь для хранения информации.
-from pprint import pprint
 
 
 def look_base():
@@ -10,9 +9,9 @@ def look_base():
         print('The employees base:')
         for emp in BASE:
             print('ID-' + str(emp) + ':', BASE[emp])
-        print()
     else:
-        print('The employees base is empty.\n')
+        print('The employees base is empty.')
+    print()
     main_menu()
 
 
@@ -94,7 +93,13 @@ def search_by_id(emp_id=0):
 
 def search_by_param(param=''):
     print('Search employee by %s.' % param, end=' ')
-    val = input('Enter %s: ' % param)
+    if param == 'phone':
+        val = enter_phone()
+        print(val)
+    elif param == 'email':
+        val = enter_email()
+    else:
+        val = input('Enter %s: ' % param)
     res = []
     while not res:
         for emp_id in BASE:
@@ -131,7 +136,7 @@ def enter_phone():
     phone = ''
     while len(phone) not in range(7, 16):
         try:
-            phone_num = int(input('Enter the phone (only 7...15 numbers, without +) of new employee: ').replace(' ', ''))
+            phone_num = int(input('Enter the employee\'s phone (only 7...15 numbers, without +): ').replace(' ', ''))
             phone = str(phone_num)
             if len(phone) not in range(7, 16):
                 try_again('enter', 'Only 7...15 numbers')
@@ -145,10 +150,10 @@ def enter_email():
     email = ''
     mask = False
     while not bool(mask):
-        email = input('Enter the e-mail of new employee: ').lower()
+        email = input('Enter the employee\'s e-mail: ').lower()
         mask = re.match(r'[\w.-]+@+[\w.-]+\.+[\w]', email)
         if not bool(mask):
-            try_again('enter', 'e-mail must have symbol @')
+            try_again('enter', 'e-mail must have format xxx@xxx.xxx')
     return email
 
 
@@ -176,8 +181,8 @@ def main_menu():
 
 
 BASE = {1: {'name': 'Joe Martin', 'phone': '+7654896547', 'email': 'joe.martin@gmail.com', 'job position': 'Chief', 'skype': 'jmartin'},
-        2: {'name': 'Mia Ellison', 'phone': '+8936485472', 'email': 'mia.elison@gmail.com', 'job position': 'HR', 'skype': 'miael'},
-        3: {'name': 'Mia Ellison', 'phone': '+8936485472', 'email': 'mia.elison@gmail.com', 'job position': 'Manager', 'skype': 'miaelli'},
+        2: {'name': 'Mia Ellison', 'phone': '+8936485472', 'email': 'mia.ellison@gmail.com', 'job position': 'HR', 'skype': 'miael'},
+        3: {'name': 'Mia Ellison', 'phone': '+8936485472', 'email': 'mia.ellison@gmail.com', 'job position': 'Manager', 'skype': 'miaelli'},
         4: {'name': 'Frederic Bouchon', 'phone': '+6321785214', 'email': 'fred.bouchon@true.fr', 'job position': 'Regional director',
             'skype': 'fredbouchon'}}
 parameters = (list(BASE[1].keys()))
