@@ -2,12 +2,17 @@
 # Нужно хранить информацию о человеке: ФИО, телефон, рабочий email, название должности, номер кабинета, skype.
 # Требуется реализовать возможность добавления, удаления, поиска, замены данных.
 # Используйте словарь для хранения информации.
+from pprint import pprint
 
 
 def look_base():
-    print('The employees base:')
-    for emp in BASE:
-        print('id' + str(emp) + ':', BASE[emp])
+    if BASE:
+        print('The employees base:')
+        for emp in BASE:
+            print('ID-' + str(emp) + ':', BASE[emp])
+        print()
+    else:
+        print('The employees base is empty.\n')
     main_menu()
 
 
@@ -26,34 +31,78 @@ def add_employee():
 
 def del_employee():
     print('Employee deleting. Please, select deleting method:')
-    print('1. via employee\'s ID.')
-    print('2. via employee\'s name.')
-    print('3. via employee\'s phone.')
-    print('4. via employee\'s email.')
-    print('5. via employee\'s skype.')
+    print('1. by employee\'s ID.')
+    print('2. by employee\'s name.')
+    print('3. by employee\'s phone.')
+    print('4. by employee\'s email.')
+    print('5. by employee\'s job position.')
+    print('6. by employee\'s skype.')
     choice = correct_choice(5)
     if choice == 1:
-        print('Deleting employee via ID.')
-        emp_id = correct_choice(max(BASE.keys()), 'ID')
-        while BASE.get(emp_id) == None:
-            print('ID not found! ', end='')
-            emp_id = correct_choice(max(BASE.keys()), 'ID')
+        emp_id = search_by_id()
         del BASE[emp_id]
         print('The employee with ID %s were delete.' % emp_id)
-    # todo
-    elif choice == 2:
-        print('Deleting employee via name.')
-    elif choice == 3:
-        print('3. via employee\'s phone.')
-    elif choice == 4:
-        print('4. via employee\'s email.')
-    else:  # choice == 5
-        print('5. via employee\'s skype.')
+    else:
+        founded_id = search_by_param(parameters[choice - 2])
+        if not founded_id:
+            print('Employee not found!')
+        elif len(founded_id) == 1:
+            del BASE[founded_id[0][0]]
+            print('The employee were delete.')
+        else:
+            print('Next employees found:')
+            for el in founded_id:
+                print(el)
+            print('Check the employee\'s info. Remember the needed employee\'s ID and delete it by ID.')
+    print()
     main_menu()
 
 
 def search_employee():
-    print('Search')
+    print('The employee searching. Please, select search method:')
+    print('1. by employee\'s ID.')
+    print('2. by employee\'s name.')
+    print('3. by employee\'s phone.')
+    print('4. by employee\'s email.')
+    print('5. by employee\'s job position.')
+    print('6. by employee\'s skype.')
+    choice = correct_choice(6)
+    if choice == 1:
+        print(BASE[search_by_id()])
+    else:
+        founded_id = search_by_param(parameters[choice - 2])
+        if not founded_id:
+            print('Employee not found!')
+        elif len(founded_id) == 1:
+            print('Employee found:', founded_id[0])
+        else:
+            print('Next employees found:')
+            for el in founded_id:
+                print(el)
+    print()
+    main_menu()
+
+
+def search_by_id(emp_id=0):
+    if emp_id == 0:
+        emp_id = correct_choice(max(BASE.keys()), 'ID')
+    while BASE.get(emp_id) is None:
+        print('ID not found! ', end='')
+        emp_id = correct_choice(max(BASE.keys()), 'ID')
+    return emp_id
+
+
+def search_by_param(param=''):
+    print('Search employee by %s.' % param, end=' ')
+    val = input('Enter %s: ' % param)
+    res = []
+    while not res:
+        for emp_id in BASE:
+            if BASE[emp_id][param].lower() == val.lower():
+                res.append((emp_id, BASE[emp_id]))
+        if not res:
+            val = input('%s not found! Input %s again: ' % (param.capitalize(), param))
+    return res
 
 
 def change_employee():
@@ -128,9 +177,9 @@ def main_menu():
 
 BASE = {1: {'name': 'Joe Martin', 'phone': '+7654896547', 'email': 'joe.martin@gmail.com', 'job position': 'Chief', 'skype': 'jmartin'},
         2: {'name': 'Mia Ellison', 'phone': '+8936485472', 'email': 'mia.elison@gmail.com', 'job position': 'HR', 'skype': 'miael'},
+        3: {'name': 'Mia Ellison', 'phone': '+8936485472', 'email': 'mia.elison@gmail.com', 'job position': 'Manager', 'skype': 'miaelli'},
         4: {'name': 'Frederic Bouchon', 'phone': '+6321785214', 'email': 'fred.bouchon@true.fr', 'job position': 'Regional director',
             'skype': 'fredbouchon'}}
-# print(max(BASE.keys()))
-# print(BASE.get(3))
-# main_menu()
-del_employee()
+parameters = (list(BASE[1].keys()))
+
+main_menu()
