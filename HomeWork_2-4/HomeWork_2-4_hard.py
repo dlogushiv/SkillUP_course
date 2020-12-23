@@ -95,7 +95,6 @@ def search_by_param(param=''):
     print('Search employee by %s.' % param, end=' ')
     if param == 'phone':
         val = enter_phone()
-        print(val)
     elif param == 'email':
         val = enter_email()
     else:
@@ -111,7 +110,41 @@ def search_by_param(param=''):
 
 
 def change_employee():
-    print('Change')
+    print('The employee\'s info changing. Please, select info you want to change:')
+    print('1. change employee\'s name.')
+    print('2. change employee\'s phone.')
+    print('3. change employee\'s email.')
+    print('4. change employee\'s job position.')
+    print('5. change employee\'s skype.')
+    choice = correct_choice(5)
+    selected_param = parameters[choice - 1]
+    founded_id = search_by_param(selected_param)
+    if not founded_id:
+        print('The employee with this %s not founded.' % selected_param)
+    elif len(founded_id) > 1:
+        print('More than one employee founded with this %s:' % selected_param)
+        for el in founded_id:
+            print(el)
+        selected_id = input('Please, select the unique ID: ')
+        while selected_id not in (str(el[0]) for el in founded_id):
+            try_again('input', 'Input ID from list bellow.')
+            selected_id = input('Input ID to change the %s' % selected_param)
+        change_by_id(int(selected_id), selected_param)
+    else:
+        emp_id = founded_id[0][0]
+        BASE[emp_id][selected_param] = input('Please, input new %s: ' % selected_param)
+    print('The employee\'s info changed.\n')
+    main_menu()
+
+
+def change_by_id(emp_id, param):
+    if param == 'phone':
+        new_val = enter_phone()
+    elif param == 'email':
+        new_val = enter_email()
+    else:
+        new_val = input('Input new %s: ' % param)
+    BASE[emp_id][param] = new_val
 
 
 def correct_choice(n, s1=''):
