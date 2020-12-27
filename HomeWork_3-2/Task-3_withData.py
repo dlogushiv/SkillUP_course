@@ -1,7 +1,5 @@
 def fill_square(size, symbol='*', is_filled=True):
-    res = []
-    for i in range(size):
-        res.append([symbol] * size)
+    res = [[symbol]*size for i in range(size)]
     if not is_filled:
         for i in range(1, size - 1):
             for j in range(1, size - 1):
