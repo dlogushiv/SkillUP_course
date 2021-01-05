@@ -35,13 +35,13 @@ if file_list_1 and file_list_2:
     result = []
     zip_files = list(zip(file_list_1, file_list_2))
     for i in range(len(zip_files)):
-        if zip_files[i][0] != zip_files[i][1]:
-            result.append((i, zip_files[i][0], zip_files[i][1]))
+        if zip_files[i][0].rstrip() != zip_files[i][1].rstrip():
+            result.append((i, zip_files[i][0].rstrip(), zip_files[i][1].rstrip()))
     if result:
         for i in range(len(result)):
             print('\tDifference in line:', result[i][0] + 1)
-            print('Line from file 1:', result[i][1].rstrip())
-            print('Line from file 2:', result[i][2].rstrip())
+            print('Line from file 1:', result[i][1])
+            print('Line from file 2:', result[i][2])
     else:
         print('The not empty lines in the files are equals.')
 else:
