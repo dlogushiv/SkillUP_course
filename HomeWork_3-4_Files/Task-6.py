@@ -14,13 +14,50 @@ def read_file(file) -> list:
     return file_list
 
 
-def search_and_replace(s_word: str, r_word: str, text: list) -> list:
+def write_file(file, lines: list):
+    try:
+        f = open(file, 'w', encoding='utf8')
+        f.writelines(lines)
+        f.close()
+    except IOError:
+        print(f'Can not write to the file.')
+
+
+def search_and_replace(s_word: str, r_word: str, file):
     """
-    Function search the s_word in the text and replace it to r_word
+    Function read a file, search the s_word in it, replace s_word to r_word and write a file with r_word
 
     :param s_word: word for search -> str
     :param r_word: word for replace -> str
-    :param text: list with str elements as lines from the file
-    :return: the list with srt elements and replaced words
+    :param file: file name
     """
-   
+    text = read_file(file)
+    for j in range(len(text)):
+        words = text[j].split(' ')
+        for i in range(len(words)):
+            # if word is last in line and it is not empty line
+            if words[i][-1:] == '\n' and len(words[i]) > 2:
+                if words[i][-2] in string.punctuation:
+                    sym = words[i][-2]
+                    if words[i][:-2] == s_word:
+                        words[i] = r_word + sym + '\n'
+            # if word's last symbol is punctuation
+            elif words[i][-1] in string.punctuation:
+                sym = words[i][-1]
+                if words[i][:-1] == s_word:
+                    words[i] = r_word + sym
+            # if last 2 symbols is 's (e.g. John's; cat's; land's)
+            elif words[i][-2:] == '\'s':
+                if words[i][:-2] == s_word:
+                    words[i] = r_word + '\'s'
+            elif words[i] == s_word:
+                words[i] = r_word
+        text[j] = ' '.join(words)
+    write_file(file, text)
+
+
+my_file = 'Task-6_File.txt'
+search_and_replace('forest', 'land', my_file)
+search_and_replace('John', 'Bob', my_file)
+search_and_replace('land', 'forest', my_file)
+search_and_replace('Bob', 'John', my_file)
