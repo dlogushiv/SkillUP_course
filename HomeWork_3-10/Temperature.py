@@ -1,16 +1,21 @@
 # Реализовать клас Температуры (как сегодня в конце урока),
 # который на основе @property будет возвращать, присваивать данные для цельсиев, фаренгейтов и кельвинов.
 
+class Scale:
+    CEL = 'C'
+    KEL = 'K'
+    FAR = 'F'
+
 
 class Temperature:
     TEMP_UNITS = 'CFK'
 
-    def __init__(self, value: float, unit: str = 'C'):
+    def __init__(self, value: float, unit: str = Scale.CEL):
         self.__value = value
         if unit.capitalize() in Temperature.TEMP_UNITS:
             self.__unit = unit.capitalize()
         else:
-            self.__unit = 'C'
+            self.__unit = Scale.CEL
             print('Wrong units input! Units set as celsius (C).')
 
     def __str__(self):
@@ -21,9 +26,9 @@ class Temperature:
 
     @property
     def celsius(self):
-        if self.__unit == 'C':
+        if self.__unit == Scale.CEL:
             return self.__value
-        elif self.__unit == 'K':
+        elif self.__unit == Scale.KEL:
             return round(self.__value - 273.15, 2)
         else:
             return round((self.__value - 32) * 5 / 9, 2)
@@ -31,13 +36,13 @@ class Temperature:
     @celsius.setter
     def celsius(self, value: float):
         self.__value = value
-        self.__unit = 'C'
+        self.__unit = Scale.CEL
 
     @property
     def kelvins(self):
-        if self.__unit == 'K':
+        if self.__unit == Scale.KEL:
             return self.__value
-        elif self.__unit == 'C':
+        elif self.__unit == Scale.CEL:
             return round(self.__value + 273.15, 2)
         else:
             return round(((self.__value - 32) * 5 / 9) + 273.15, 2)
@@ -45,13 +50,13 @@ class Temperature:
     @kelvins.setter
     def kelvins(self, value: float):
         self.__value = value
-        self.__unit = 'K'
+        self.__unit = Scale.KEL
 
     @property
     def fahrenheits(self):
-        if self.__unit == 'F':
+        if self.__unit == Scale.FAR:
             return self.__value
-        elif self.__unit == 'C':
+        elif self.__unit == Scale.CEL:
             return round((self.__value * 9 / 5) + 32, 2)
         else:
             return round(((self.__value - 273.15) * 9 / 5) + 32, 2)
@@ -59,7 +64,7 @@ class Temperature:
     @fahrenheits.setter
     def fahrenheits(self, value: float):
         self.__value = value
-        self.__unit = 'F'
+        self.__unit = Scale.FAR
 
 
 if __name__ == '__main__':
